@@ -12,26 +12,28 @@ var player1left = new Image();
 player1left.src = 'static/closeleft0.png';
 var player1right = new Image();
 player1right.src = 'static/closeright0.png';
-var player1_x = 120;
-var player1_y = 255;                                         // 设置了初位置！！！
+var player1_x = 0;
+var player1_y = 0;                                         // 设置了初位置！！！
 var player1_HP = 10;
 var player1_FC = 5;//玩家1的战斗力
 var player1_speed;//玩家1的速度
-var dir1;//玩家1方向，1、2、3、4分别为上下左右
+var dir1 = 1;//玩家1方向，1、2、3、4分别为上下左右
 var mouth1 = 0;//mouth open:0 mouth close:1
+var speed1 = 5;
 
 //设置玩家2（左上角出发）
 var player2left = new Image();
-player1left.src = 'static/closeleft1.png';
+player2left.src = 'static/closeleft1.png';
 var player2right = new Image();
-player1right.src = 'static/closeright1.png';
-var player2_x = 0;
-var player2_y = 0;
+player2right.src = 'static/closeright1.png';
+var player2_x = 265;
+var player2_y = 120;
 var player2_HP = 10;
 var player2_FC = 5;//玩家2的战斗力
 var player2_speed;//玩家2的速度
-var dir2;//玩家2方向，1、2、3、4分别为上下左右
+var dir2 = 0;//玩家2方向，1、2、3、4分别为上下左右
 var mouth2 = 0;//mouth open:0 mouth close:1
+var speed2 = 5;
 
 //设置object
 var object1 = new Image();
@@ -97,11 +99,13 @@ function draw(){
             }
         }
     }
+    //ctx.drawImage(player1, 0, 0, 35,30);
     //画出玩家1
+    //console.log("画出玩家");
     if(dir1==1){
         ctx.drawImage(player1right, player1_x, player1_y, 35,30);
     }else{
-        ctx.drawImage(player1right, player1_x, player1_y, 35,30);
+        ctx.drawImage(player1left, player1_x, player1_y, 35,30);
     }
     //画出玩家2
     if(dir2==1){
@@ -190,7 +194,7 @@ function initialize(){
         document.addEventListener('keydown',function(pressButton){
             if(pressButton.code == 'ArrowRight'){
                 if (player1_x + 35 < canvas.width){
-                    player1_x += speed;
+                    player1_x += speed1;
                     dir1 = 1;
                 }
                 else{
@@ -200,7 +204,7 @@ function initialize(){
         
             if(pressButton.code == 'ArrowLeft'){
                 if (player1_x > 0){
-                    player1_x -= speed;
+                    player1_x -= speed1;
                     dir1 = 0;
                 }
                 else{
@@ -209,13 +213,13 @@ function initialize(){
             }
             if(pressButton.code == 'ArrowUp'){
                 if(player1_y >0 && player1_y + 30<=150){
-                    player1_y -= speed;
+                    player1_y -= speed1;
                     dir1 = 0;
                 }
             }
             if(pressButton.code == 'ArrowDown'){
                 if(player1_y >=0 && player1_y + 30 <150){
-                    player1_y += speed;
+                    player1_y += speed1;
                     dir1 = 0;
                 }
             }
@@ -225,9 +229,10 @@ function initialize(){
         });
         //玩家2通过WASD移动
         document.addEventListener('keydown',function(pressButton){
-            if(pressButton.key == 'D'){
+            console.log(pressButton.key);
+            if(pressButton.key == 'd'){
                 if (player2_x + 35 < canvas.width){
-                    player2_x += speed;
+                    player2_x += speed2;
                     dir2 = 1;
                 }
                 else{
@@ -235,24 +240,24 @@ function initialize(){
                 }
             }
         
-            if(pressButton.key == 'A'){
+            if(pressButton.key == 'a'){
                 if (player2_x > 0){
-                    player2_x -= speed;
+                    player2_x -= speed2;
                     dir2 = 0;
                 }
                 else{
                     dir2 = 1;
                 }
             }
-            if(pressButton.key == 'W'){
+            if(pressButton.key == 'w'){
                 if(player2_y >0 && player2_y + 30<=150){
-                    player2_y -= speed;
+                    player2_y -= speed2;
                     dir2 = 0;
                 }
             }
-            if(pressButton.key == 'S'){
+            if(pressButton.key == 's'){
                 if(player2_y >=0 && player2_y + 30 <150){
-                    player2_y += speed;
+                    player2_y += speed2;
                     dir2 = 0;
                 }
             }
