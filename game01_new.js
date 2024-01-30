@@ -3,9 +3,10 @@ var ctx = canvas.getContext('2d')
 
 var canvas1 = document.getElementById('canvas1')
 var ctx1 = canvas1.getContext('2d')
-
+canvas1.style.backgroundColor='red';
 var canvas2 = document.getElementById('canvas2')
 var ctx2 = canvas2.getContext('2d')
+canvas2.style.backgroundColor='red';
 
 //设置玩家1 (右下角出发)
 var player1left = new Image();
@@ -15,7 +16,7 @@ player1right.src = 'static/closeright0.png';
 var player1_x = 0;
 var player1_y = 0;                                         // 设置了初位置！！！
 var player1_HP = 10;
-var player1_FC = 5;//玩家1的战斗力
+var player1_FC = 4;//玩家1的战斗力
 var player1_speed;//玩家1的速度
 var dir1 = 1;//玩家1方向，1、2、3、4分别为上下左右
 var speed1 = 5;
@@ -35,11 +36,11 @@ var speed2 = 5;
 
 //设置object
 var object1 = new Image();
-object1.src = "";
+object1.src = "static/food1.jpg";
 var object2 = new Image();
-object12src = "";
+object12src = "static/food2.jpg";
 var object3 = new Image();
-object3.src = "";
+object3.src = "static/baba.jpg";
 
 var ob_x = [];
 var ob_y = [];
@@ -130,12 +131,38 @@ function check_collision(){
 
     //检测玩家与玩家，撞到了扣血
     
+    var blood1 = 10;
+    var blood2 = 10;
     if (player1_x < player2_x + 35 && player1_x + 35 > player2_x && player1_y < player2_y + 30 && player1_y + 30 > player2_y){
-        if (player1_FC > player2_FC){
-            player1_HP -= floor((player1_FC-player2_FC)/10);
+        if (player1_FC > player2_FC && blood2 > 0){
+            player1_HP -= floor((player1_FC-player2_FC)/10) + 1;
+            blood2 -= floor((player1_FC-player2_FC)/10) + 1;
+            var redWidth = canvas2.width * (blood2 / 10);
+            var redHeight = canvas2.height;
+            // 绘制红色矩形
+            ctx2.fillStyle = 'red';
+            ctx2.fillRect(0, 0, redWidth, redHeight);
+            // 绘制白色矩形
+            ctx2.fillStyle = 'white';
+            ctx2.fillRect(redWidth, 0, canvas.width - redWidth, redHeight);
         }
-        else if (player1_FC < player2_FC){
-            player2_HP -= floor((player2_FC-player1_FC)/10);
+        if (player1_FC < player2_FC && blood1 > 0){
+            player2_HP -= floor((player2_FC-player1_FC)/10) + 1;
+            blood1 -= floor((player2_FC-player1_FC)/10) + 1;
+            var redWidth = canvas1.width * (blood1 / 10);
+            var redHeight = canvas1.height;
+            // 绘制红色矩形
+            ctx1.fillStyle = 'red';
+            ctx1.fillRect(0, 0, redWidth, redHeight);
+            // 绘制白色矩形
+            ctx1.fillStyle = 'white';
+            ctx1.fillRect(redWidth, 0, canvas.width - redWidth, redHeight);
+        }
+        if (blood1 = 0){
+            console.log('player2 win');
+        }
+        if (blood2 = 0){
+            console.log('player1 win');
         }
     }
     
