@@ -47,14 +47,16 @@ div{
   border:solid;
 }
 
-#canvas1{
-  height: 70px;
-  width: 400px;
-  border:solid;
+#canvas1 {
+  height: 30px;
+  width: 300px;
+  border: solid;
 }
+
+
 #canvas2{
-  height: 70px;
-  width: 400px;
+  height: 30px;
+  width: 300px;
   border:solid;
 }
 

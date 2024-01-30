@@ -18,7 +18,6 @@ var player1_HP = 10;
 var player1_FC = 5;//玩家1的战斗力
 var player1_speed;//玩家1的速度
 var dir1 = 1;//玩家1方向，1、2、3、4分别为上下左右
-var mouth1 = 0;//mouth open:0 mouth close:1
 var speed1 = 5;
 
 //设置玩家2（左上角出发）
@@ -32,7 +31,6 @@ var player2_HP = 10;
 var player2_FC = 5;//玩家2的战斗力
 var player2_speed;//玩家2的速度
 var dir2 = 0;//玩家2方向，1、2、3、4分别为上下左右
-var mouth2 = 0;//mouth open:0 mouth close:1
 var speed2 = 5;
 
 //设置object
@@ -145,14 +143,14 @@ function check_collision(){
     //检测玩家与物体,需要用循环遍历,撞到好的加攻击，不好的减攻击
     //玩家1
     for (var i = 0; i <= 500; i++){
-        if (player1_x < ob_x[i] + 10 && player1_x + 35 > ob_x[i] && player1_y < ob_y[i] + 10 && player1_y + 30 > ob_y[i] && mouth1 == 0){
+        if (player1_x < ob_x[i] + 10 && player1_x + 35 > ob_x[i] && player1_y < ob_y[i] + 10 && player1_y + 30 > ob_y[i]){
             player1_FC += ob_value[i];
             ob_value[i] = 0;
         }
     }
     //玩家2
     for (var i = 0; i <= 500; i++){
-        if (player2_x < ob_x[i] + 10 && player2_x + 35 > ob_x[i] && player2_y < ob_y[i] + 10 && player2_y + 30 > ob_y[i] && mouth2 == 0){
+        if (player2_x < ob_x[i] + 10 && player2_x + 35 > ob_x[i] && player2_y < ob_y[i] + 10 && player2_y + 30 > ob_y[i]){
             player2_FC += ob_value[i];
             ob_value[i] = 0;
         }
@@ -223,9 +221,6 @@ function initialize(){
                     dir1 = 0;
                 }
             }
-            if(pressButton.code == 'Space'){
-                mouth1 = 1;
-            }
         });
         //玩家2通过WASD移动
         document.addEventListener('keydown',function(pressButton){
@@ -260,9 +255,6 @@ function initialize(){
                     player2_y += speed2;
                     dir2 = 0;
                 }
-            }
-            if(pressButton.code == 'Q'){
-                mouth2 = 1;
             }
         });
         check_collision();
