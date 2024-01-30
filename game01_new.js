@@ -112,6 +112,7 @@ function draw(){
     }else{
         ctx.drawImage(player2left, player2_x, player2_y, 35,30);
     }
+    check_collision();
 }
 
 function identify_life(){
@@ -135,8 +136,8 @@ function check_collision(){
     var blood2 = 10;
     if (player1_x < player2_x + 35 && player1_x + 35 > player2_x && player1_y < player2_y + 30 && player1_y + 30 > player2_y){
         if (player1_FC > player2_FC && blood2 > 0){
-            player1_HP -= floor((player1_FC-player2_FC)/10) + 1;
-            blood2 -= floor((player1_FC-player2_FC)/10) + 1;
+            player1_HP -= Math.floor((player1_FC-player2_FC)/10) + 1;
+            blood2 -= Math.floor((player1_FC-player2_FC)/10) + 1;
             var redWidth = canvas2.width * (blood2 / 10);
             var redHeight = canvas2.height;
             // 绘制红色矩形
@@ -147,8 +148,10 @@ function check_collision(){
             ctx2.fillRect(redWidth, 0, canvas.width - redWidth, redHeight);
         }
         if (player1_FC < player2_FC && blood1 > 0){
-            player2_HP -= floor((player2_FC-player1_FC)/10) + 1;
-            blood1 -= floor((player2_FC-player1_FC)/10) + 1;
+            player2_HP -= Math.floor((player2_FC-player1_FC)/10) + 1;
+            console.log(player1_HP);
+            console.log(player2_HP);
+            blood1 -= Math.floor((player2_FC-player1_FC)/10) + 1;
             var redWidth = canvas1.width * (blood1 / 10);
             var redHeight = canvas1.height;
             // 绘制红色矩形
