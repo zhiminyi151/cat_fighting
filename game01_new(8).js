@@ -77,13 +77,13 @@ function generate_object(){
             ob_value.push(2);
             ob_x.push(tmp_posX * 270);
             ob_y.push(tmp_posY * 120);
-            ob_time.push(Math.floor(Math.random() * 3) + 10);//the duration is 4-6s(include 4 and 6)
+            ob_time.push(Math.floor(Math.random() * 2) + 3);//the duration is 4-6s(include 4 and 6)
         } 
         else if(tmp_type >= 0.6){
             ob_value.push(5);
             ob_x.push(tmp_posX * 270);
             ob_y.push(tmp_posY * 120);
-            ob_time.push(Math.floor(Math.random() * 3) + 5);//1-3 seconds
+            ob_time.push(Math.floor(Math.random() * 2) + 2);//1-3 seconds
         }
         else{
             ob_value.push(-3);
@@ -98,7 +98,7 @@ function generate_object(){
             // ob_y.push((tmp_posY - 0.5) * 120 + player_pos_y[chos]);
             ob_x.push(tmp_posX * 270);
             ob_y.push(tmp_posY * 120);
-            ob_time.push(Math.floor(Math.random() * 7) + 10);//4-10 seconds
+            ob_time.push(Math.floor(Math.random() * 2) + 1);//4-10 seconds
         }
     }
 }
@@ -155,7 +155,8 @@ function check_collision(){
     //这个函数的作用是检测两个物体是否碰到，可以检测object和玩家操控的猫猫，也可以是猫猫和猫猫
 
     //检测玩家与玩家，撞到了扣血
-    
+    console.log("HP1: " + player1_HP);
+    console.log("HP2: " + player2_HP);
     if (player1_x < player2_x + 35 && player1_x + 35 > player2_x && player1_y < player2_y + 30 && player1_y + 30 > player2_y){
         if (player1_FC > player2_FC){
             player2_HP -= Math.floor((player1_FC-player2_FC)/10) + 2;
@@ -193,19 +194,21 @@ function check_collision(){
         }
         
     }
-        
-    if (player1_HP <= 0 || player1_FC <= 0){
-        console.log('player2 win');
-        alert("player2 win");
-        player1_HP = 10;
-        flag = false;
-    }
-    if (player2_HP <= 0 || player2_FC <= 0){
-        console.log('player1 win');
-        alert("player1 win")
-        player2_HP = 10;
-        flag = false;
-    }
+    if (flag){
+        if (player1_HP <= 0 || player1_FC <= 0){
+            console.log('player2 win');
+            alert("player2 win");
+            flag = false;
+            reset();
+        }
+        if (player2_HP <= 0 || player2_FC <= 0){
+            console.log('player1 win');
+            alert("player1 win")
+            flag = false;
+            reset();
+        }
+    }    
+    
     //检测玩家与物体,需要用循环遍历,撞到好的加攻击，不好的减攻击
     //玩家1
     for (var i = 0; i < 500; i++){
@@ -241,89 +244,126 @@ function initCondition() {
     
 }
 
-var flag = true;
-function initialize(){
-    if (flag){
+function reset(){
+    if (!flag){
+        console.log("reset");
+        time = 0;
+        ob_x = [];
+        ob_y = [];
+        ob_time = [];
+        ob_value = [];
+
+        player2_x = 0;
+        player2_y = 0;
+        player2_HP = 10;
+        player2_FC = 20;//玩家2的战斗力
+        player2_speed;//玩家2的速度
+        dir2 = 1;//玩家2方向  0左 1右
+
+        player1_x = 265;
+        player1_y = 120;                                         // 设置了初位置！！！
+        player1_HP = 10;
+        player1_FC = 20;//玩家1的战斗力
+        player1_speed;//玩家1的速度
+        dir1 = 0;//玩家1方向 0左 1右
+
+        ctx1.fillStyle = 'red';
+        ctx1.fillRect(0, 0, canvas1.width, canvas1.height);
+        document.getElementById('player1FCValue').innerText = 'Player1_FC:' + player1_FC;
+
+        ctx2.fillStyle = 'red';
+        ctx2.fillRect(0, 0, canvas2.width, canvas2.height);
+        document.getElementById('player2FCValue').innerText = 'Player2_FC:' + player2_FC;
+
+        flag = true;
+
         initCondition();
-        setInterval(draw, 30);
-        //玩家1通过↑↓←→移动
-        document.addEventListener('keydown',function(pressButton){
-            if(pressButton.code == 'ArrowRight'){
-                if (player1_x + 35 < canvas.width){
-                    player1_x += speed1;
-                    dir1 = 1;
-                }
-                else{
-                    dir1 = 0;
-                }
-            }
         
-            if(pressButton.code == 'ArrowLeft'){
-                if (player1_x > 0){
-                    player1_x -= speed1;
-                    dir1 = 0;
-                }
-                else{
-                    dir1 = 1;
-                }
-            }
-            if(pressButton.code == 'ArrowUp'){
-                if(player1_y >0 && player1_y + 30<=150){
-                    player1_y -= speed1;
-                    dir1 = 0;
-                }
-            }
-            if(pressButton.code == 'ArrowDown'){
-                if(player1_y >=0 && player1_y + 30 <150){
-                    player1_y += speed1;
-                    dir1 = 0;
-                }
-            }
-            if(pressButton.code == 'Space'){
-                if (mouth1==0) mouth1=1;
-                else mouth1=0;
-            }
-        });
-        //玩家2通过WASD移动
-        document.addEventListener('keydown',function(pressButton){
-            console.log(pressButton.key);
-            if(pressButton.key == 'd'){
-                if (player2_x + 35 < canvas.width){
-                    player2_x += speed2;
-                    dir2 = 1;
-                }
-                else{
-                    dir2 = 0;
-                }
-            }
-        
-            if(pressButton.key == 'a'){
-                if (player2_x > 0){
-                    player2_x -= speed2;
-                    dir2 = 0;
-                }
-                else{
-                    dir2 = 1;
-                }
-            }
-            if(pressButton.key == 'w'){
-                if(player2_y >0 && player2_y + 30<=150){
-                    player2_y -= speed2;
-                    dir2 = 0;
-                }
-            }
-            if(pressButton.key == 's'){
-                if(player2_y >=0 && player2_y + 30 <150){
-                    player2_y += speed2;
-                    dir2 = 0;
-                }
-            }
-            if(pressButton.key == 'q'){
-                if (mouth2==0) mouth2=1;
-                else mouth2=0;
-            }
-        });
     }
+}
+
+var flag = true;
+
+function initialize(){
+    initCondition();
+    setInterval(draw,30);
+    //玩家1通过↑↓←→移动
+    document.addEventListener('keydown',function(pressButton){
+        if(pressButton.code == 'ArrowRight'){
+            if (player1_x + 35 < canvas.width){
+                player1_x += speed1;
+                dir1 = 1;
+            }
+            else{
+                dir1 = 0;
+            }
+        }
+    
+        if(pressButton.code == 'ArrowLeft'){
+            if (player1_x > 0){
+                player1_x -= speed1;
+                dir1 = 0;
+            }
+            else{
+                dir1 = 1;
+            }
+        }
+        if(pressButton.code == 'ArrowUp'){
+            if(player1_y >0 && player1_y + 30<=150){
+                player1_y -= speed1;
+                dir1 = 0;
+            }
+        }
+        if(pressButton.code == 'ArrowDown'){
+            if(player1_y >=0 && player1_y + 30 <150){
+                player1_y += speed1;
+                dir1 = 0;
+            }
+        }
+        if(pressButton.code == 'Space'){
+            if (mouth1==0) mouth1=1;
+            else mouth1=0;
+        }
+    });
+    //玩家2通过WASD移动
+    document.addEventListener('keydown',function(pressButton){
+        console.log(pressButton.key);
+        if(pressButton.key == 'd'){
+            if (player2_x + 35 < canvas.width){
+                player2_x += speed2;
+                dir2 = 1;
+            }
+            else{
+                dir2 = 0;
+            }
+        }
+    
+        if(pressButton.key == 'a'){
+            if (player2_x > 0){
+                player2_x -= speed2;
+                dir2 = 0;
+            }
+            else{
+                dir2 = 1;
+            }
+        }
+        if(pressButton.key == 'w'){
+            if(player2_y >0 && player2_y + 30<=150){
+                player2_y -= speed2;
+                dir2 = 0;
+            }
+        }
+        if(pressButton.key == 's'){
+            if(player2_y >=0 && player2_y + 30 <150){
+                player2_y += speed2;
+                dir2 = 0;
+            }
+        }
+        if(pressButton.key == 'q'){
+            if (mouth2==0) mouth2=1;
+            else mouth2=0;
+        }
+    });
 
 }
 
