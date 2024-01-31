@@ -84,7 +84,7 @@ function generate_object(){
 
 function draw(){
     ctx.clearRect(0, 0, 300, 150);
-    drawHPandFC();
+    //drawHPandFC();
     for (var i = 0; i < 500; i++){
         if (time >= 3 * i && time <= 3 * i + ob_time[i]){
             if (ob_value[i] == 2){
