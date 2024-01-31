@@ -8,6 +8,14 @@ var canvas2 = document.getElementById('canvas2')
 var ctx2 = canvas2.getContext('2d')
 canvas2.style.backgroundColor='red';
 
+var timeInterval = 100;
+
+setInterval(function(){
+    generate_object();
+    draw();
+    time += 0.1;
+},timeInterval)
+
 //设置玩家1 (右下角出发)
 var player1left = new Image();
 player1left.src = 'static/closeleft0.png';
@@ -38,7 +46,7 @@ var speed2 = 5;
 var object1 = new Image();
 object1.src = "static/food1.jpg";
 var object2 = new Image();
-object12src = "static/food2.jpg";
+object2.src = "static/food2.jpg";
 var object3 = new Image();
 object3.src = "static/baba.jpg";
 
@@ -57,13 +65,13 @@ function generate_object(){
         if (tmp_type >= 0.5){
             ob_value.push(2);
             ob_x.push(tmp_posX * 270);
-            ob_y.push(tmp_posY * 150);
+            ob_y.push(tmp_posY * 120);
             ob_time.push(Math.floor(Math.random() * 3) + 4);//the duration is 4-6s(include 4 and 6)
         } 
         else if(tmp_type >= 0.3){
             ob_value.push(5);
             ob_x.push(tmp_posX * 270);
-            ob_y.push(tmp_posY * 150);
+            ob_y.push(tmp_posY * 120);
             ob_time.push(Math.floor(Math.random() * 3) + 1);//1-3 seconds
         }
         else{
@@ -138,7 +146,7 @@ function check_collision(){
         if (player1_FC > player2_FC && blood2 > 0){
             player1_HP -= Math.floor((player1_FC-player2_FC)/10) + 1;
             blood2 -= Math.floor((player1_FC-player2_FC)/10) + 1;
-            var redWidth = canvas2.width * (blood2 / 10);
+            var redWidth = canvas2.width * blood2 / 10;
             var redHeight = canvas2.height;
             // 绘制红色矩形
             ctx2.fillStyle = 'red';
@@ -152,7 +160,7 @@ function check_collision(){
             console.log(player1_HP);
             console.log(player2_HP);
             blood1 -= Math.floor((player2_FC-player1_FC)/10) + 1;
-            var redWidth = canvas1.width * (blood1 / 10);
+            var redWidth = canvas1.width * blood1 / 10;
             var redHeight = canvas1.height;
             // 绘制红色矩形
             ctx1.fillStyle = 'red';
@@ -172,17 +180,17 @@ function check_collision(){
     
     //检测玩家与物体,需要用循环遍历,撞到好的加攻击，不好的减攻击
     //玩家1
-    for (var i = 0; i <= 500; i++){
+    for (var i = 0; i < 500; i++){
         if (player1_x < ob_x[i] + 10 && player1_x + 35 > ob_x[i] && player1_y < ob_y[i] + 10 && player1_y + 30 > ob_y[i]){
             player1_FC += ob_value[i];
-            ob_value[i] = 0;
+            ob_time[i] = 0;
         }
     }
     //玩家2
-    for (var i = 0; i <= 500; i++){
+    for (var i = 0; i < 500; i++){
         if (player2_x < ob_x[i] + 10 && player2_x + 35 > ob_x[i] && player2_y < ob_y[i] + 10 && player2_y + 30 > ob_y[i]){
             player2_FC += ob_value[i];
-            ob_value[i] = 0;
+            ob_time[i] = 0;
         }
     }
 }
