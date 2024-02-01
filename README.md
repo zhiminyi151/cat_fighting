@@ -14,6 +14,7 @@ Name: Zhu Minyi, Shi Weiyi, Zhuo Yuwei, Xu Rong
 - Once the FC drops to 0, the cat die and the higher the delta of the FC, when 2 cats collides, the HP drops more
 - The game also ends when HP drops to 0, which stands for the blood.
 - When 2 cats collide, they will go back to the initial position.
+- When the cat eat the medicine bottle, it can be changed into a dog for 5 seconds, which can eat everything including shit.
 
 ### Compiling
 
