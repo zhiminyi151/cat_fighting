@@ -45,6 +45,7 @@ var player1_speed;//玩家1的速度
 var dir1 = 0;//玩家1方向 0左 1右
 var speed1 = 5;
 var mouth1 = 1;//1张0闭
+var animal1 = 1;//1猫0狗
 
 //设置玩家2（左上角出发）
 var player2lefto = new Image();
@@ -63,20 +64,26 @@ var player2_speed;//玩家2的速度
 var dir2 = 1;//玩家2方向  0左 1右
 var speed2 = 5;
 var mouth2 = 1;//1张0闭
+var animal2 = 1;//1猫0狗
 
 //设置object
 var object1 = new Image();
-object1.src = "static/food1.png";
+object1.src = 'static/food1.png';
 var object2 = new Image();
-object2.src = "static/food2.png";
+object2.src = 'static/food2.png';
 var object3 = new Image();
-object3.src = "static/baba.png";
+object3.src = 'static/baba.png';
 
 var ob_x = [];
 var ob_y = [];
 var ob_time = [];
 var ob_value = [];
 
+//设置小狗和药瓶
+var bottle = new Image();
+bottle.src = 'static/bottle.png';
+var dog = new Image();
+dog.src = 'static/dog.png';
 
 var time = 0;
 
@@ -131,33 +138,55 @@ function draw(){
             }
         }
     }
+
+    //draw the magic bottle
+        if(time >= 10){
+            if(animal1 == 1 && animal2 == 1){
+            ctx.drawImage(bottle, 135, 70, 10, 10);
+            //判断是否要变成狗
+            if(player1_x < 145 && player1_x > 100 && player1_y < 80 && player1_y > 40){
+                animal1 = 0;
+            }
+            if(player2_x < 145 && player2_x > 100 && player2_y < 80 && player2_y > 40){
+                animal2 = 0;
+            }
+            }
+        }
+
+    
     //ctx.drawImage(player1, 0, 0, 35,30);
     //画出玩家1
     //console.log("画出玩家");
-    if(dir1==1 && mouth1==1){
+    if(dir1==1 && mouth1==1 && animal1==1){
         ctx.drawImage(player1righto, player1_x, player1_y, 35,30);
     }
-    else if(dir1==1 && mouth1==0){
+    else if(dir1==1 && mouth1==0 && animal1==1){
         ctx.drawImage(player1rightc, player1_x, player1_y, 35,30);
     }
-    else if(dir1==0 && mouth1==1){
+    else if(dir1==0 && mouth1==1 && animal1==1){
         ctx.drawImage(player1lefto, player1_x, player1_y, 35,30);
     }
-    else{
+    else if(dir1==0 && mouth1==0 && animal1==1){
         ctx.drawImage(player1leftc, player1_x, player1_y, 35,30);
     }
+    else{
+        ctx.drawImage(dog,player1_x, player1_y, 35, 30);
+    }
     //画出玩家2
-    if(dir2==1 && mouth2==1){
+    if(dir2==1 && mouth2==1 && animal2==1){
         ctx.drawImage(player2righto, player2_x, player2_y, 35,30);
     }
-    else if(dir2==1 && mouth2==0){
+    else if(dir2==1 && mouth2==0 && animal2==1){
         ctx.drawImage(player2rightc, player2_x, player2_y, 35,30);
     }
-    else if(dir2==0 && mouth2==1){
+    else if(dir2==0 && mouth2==1 && animal2==1){
         ctx.drawImage(player2lefto, player2_x, player2_y, 35,30);
     }
-    else{
+    else if(dir2==0 && mouth2==0 && animal2==1){
         ctx.drawImage(player2leftc, player2_x, player2_y, 35,30);
+    }
+    else{
+        ctx.drawImage(dog,player2_x, player2_y, 35, 30);
     }
     check_collision();
 }
@@ -233,10 +262,17 @@ function check_collision(){
     for (var i = 0; i < 500; i++){
         if (mouth1==1){
             if (player1_x < ob_x[i] + 10 && player1_x + 35 > ob_x[i] && player1_y < ob_y[i] + 10 && player1_y + 30 > ob_y[i]){
-                if (time >= i && time <= 3 * i + ob_time[i]){
+                if (time >= i && time <= i + ob_time[i]){
                     player1_FC += ob_value[i];
                     ob_time[i] = 0;
-                    ob_value[i] = 0;}
+                    ob_value[i] = 0;
+                    //设置音效
+                    var time1 = time;
+                    if(time>=time1 && time<= time1 + 0.5){
+                    const yummy = new Audio("637072__sergequadrado__dad-says-yummy.wav");
+                    yummy.play();
+                    }
+                }
             }
         }
         document.getElementById('player1FCValue').innerText = 'Player1_FC:' + player1_FC;
@@ -245,10 +281,16 @@ function check_collision(){
     for (var i = 0; i < 500; i++){
         if (mouth2==1){
             if (player2_x < ob_x[i] + 10 && player2_x + 35 > ob_x[i] && player2_y < ob_y[i] + 10 && player2_y + 30 > ob_y[i]){
-                if (time >= i && time <= 3 * i + ob_time[i]) {
+                if (time >= i && time <= i + ob_time[i]) {
                     player2_FC += ob_value[i];
                     ob_time[i] = 0;
                     ob_value[i] = 0;
+                    //设置音效
+                    var time1 = time;
+                    if(time>=time1 && time<= time1 + 0.5){
+                    const yummy = new Audio("637072__sergequadrado__dad-says-yummy.wav");
+                    yummy.play();
+                    }
                 }
             }
         }

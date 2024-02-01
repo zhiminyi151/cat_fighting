@@ -19,4 +19,9 @@ Name: Zhu Minyi, Shi Weiyi, Zhuo Yuwei, Xu Rong
 
 ### Running
 
+- install `Node` from its official web page
+- open terminal and run `npm init vite`
+- select `Vanilla` and `Javascript`
+- run `npm install three` on the terminal
+- then `code .` `npm run dev`
 - open the .html file
