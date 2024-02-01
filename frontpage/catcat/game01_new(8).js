@@ -85,17 +85,17 @@ function generate_object(){
         var tmp_type = Math.random();
         var tmp_posX = Math.random();
         var tmp_posY = Math.random();//the object can be covered by the player once it occurs
-        if (tmp_type >= 0.7){
+        if (tmp_type >= 0.65){
             ob_value.push(2);
             ob_x.push(tmp_posX * 270);
             ob_y.push(tmp_posY * 120);
-            ob_time.push(Math.floor(Math.random() * 2) + 10);//the duration is 4-6s(include 4 and 6)
+            ob_time.push(Math.floor(Math.random() * 2) + 13);//the duration is 4-6s(include 4 and 6)
         } 
-        else if(tmp_type >= 0.6){
+        else if(tmp_type >= 0.48){
             ob_value.push(5);
             ob_x.push(tmp_posX * 270);
             ob_y.push(tmp_posY * 120);
-            ob_time.push(Math.floor(Math.random() * 2) + 8);//1-3 seconds
+            ob_time.push(Math.floor(Math.random() * 2) + 10);//1-3 seconds
         }
         else{
             ob_value.push(-3);
