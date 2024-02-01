@@ -16,6 +16,18 @@ setInterval(function(){
     time += 0.1;
 },timeInterval)
 
+// var img = new Image();
+// var svg = new Blob([svgString], {type: "image/svg+xml;charset=utf-8"});
+
+// var DOMURL = self.URL || self.webkitURL || self;
+// var url = DOMURL.createObjectURL(svg);
+
+// img.src = 'static/cat2left.svg';
+
+// img.onload = function () {
+//     ctx.drawImage(img, 0, 0);
+// };
+
 //设置玩家1 (右下角出发)
 var player1lefto = new Image();
 player1lefto.src = 'static/openleft0.png';
@@ -54,11 +66,11 @@ var mouth2 = 1;//1张0闭
 
 //设置object
 var object1 = new Image();
-object1.src = "static/food1.jpg";
+object1.src = "static/food1.png";
 var object2 = new Image();
-object2.src = "static/food2.jpg";
+object2.src = "static/food2.png";
 var object3 = new Image();
-object3.src = "static/baba.jpg";
+object3.src = "static/baba.png";
 
 var ob_x = [];
 var ob_y = [];
@@ -197,12 +209,19 @@ function check_collision(){
     if (flag){
         if (player1_HP <= 0 || player1_FC <= 0){
             console.log('player2 win');
+            ctx1.clearRect(0, 0, 40, 7);
+            document.getElementById('player1FCValue').innerText = 'Player1_FC:' + player1_FC;
+            document.getElementById('player2FCValue').innerText = 'Player2_FC:' + player2_FC;
             alert("player2 win");
             flag = false;
             reset();
         }
         if (player2_HP <= 0 || player2_FC <= 0){
             console.log('player1 win');
+            ctx2.clearRect(0, 0, 40, 7);
+            document.getElementById('player1FCValue').innerText = 'Player1_FC:' + player1_FC;
+            document.getElementById('player2FCValue').innerText = 'Player2_FC:' + player2_FC;
+            alert("player2 win");
             alert("player1 win")
             flag = false;
             reset();
