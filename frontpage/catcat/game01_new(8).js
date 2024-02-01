@@ -84,6 +84,8 @@ var bottle = new Image();
 bottle.src = 'static/bottle.png';
 var dog = new Image();
 dog.src = 'static/dog.png';
+var dogright = new Image();
+dogright.src = 'static/dogright.png';
 
 var time = 0;
 
@@ -122,6 +124,8 @@ function generate_object(){
     }
 }
 
+var moment = 10000000000;
+
 function draw(){
     ctx.clearRect(0, 0, 300, 150);
     //drawHPandFC();
@@ -138,18 +142,41 @@ function draw(){
             }
         }
     }
-
+    
     //draw the magic bottle
-        if(time >= 10){
+        if(time >= 10 && time <= 20 && moment == 10000000000){
+            console.log("animal1:"+animal1);
+            console.log("animal2:"+animal2);
             if(animal1 == 1 && animal2 == 1){
-            ctx.drawImage(bottle, 135, 70, 10, 10);
-            //判断是否要变成狗
-            if(player1_x < 145 && player1_x > 100 && player1_y < 80 && player1_y > 40){
+                ctx.drawImage(bottle, 135, 70, 10, 10);
+                //判断是否要变成狗
+                if(player1_x < 145 && player1_x > 100 && player1_y < 80 && player1_y > 40){
+                    animal1 = 0;
+                    moment = time;
+                    mouth1 = 1;
+                }
+                if(player2_x < 145 && player2_x > 100 && player2_y < 80 && player2_y > 40){
+                    animal2 = 0;
+                    moment = time;
+                    mouth2 = 1;
+                }
+            }
+        }
+        console.log("moment: "+moment);
+        console.log("time: "+time);
+        if(animal1 == 0 && animal2 == 1){
+            if(time >= moment && time <= moment + 5){
                 animal1 = 0;
+            }else{
+                animal1 = 1;
             }
-            if(player2_x < 145 && player2_x > 100 && player2_y < 80 && player2_y > 40){
+        }
+        else if(animal1 == 1 && animal2 == 0){
+            if(time >= moment && time <= moment + 5){
+                console.log("time within moment");
                 animal2 = 0;
-            }
+            }else{
+                animal2 = 1;
             }
         }
 
@@ -169,8 +196,11 @@ function draw(){
     else if(dir1==0 && mouth1==0 && animal1==1){
         ctx.drawImage(player1leftc, player1_x, player1_y, 35,30);
     }
-    else{
+    else if(dir1==0 && animal1==0){
         ctx.drawImage(dog,player1_x, player1_y, 35, 30);
+    }
+    else if(dir1==1 && animal1==0){
+        ctx.drawImage(dogright,player1_x, player1_y, 35, 30);
     }
     //画出玩家2
     if(dir2==1 && mouth2==1 && animal2==1){
@@ -185,8 +215,10 @@ function draw(){
     else if(dir2==0 && mouth2==0 && animal2==1){
         ctx.drawImage(player2leftc, player2_x, player2_y, 35,30);
     }
-    else{
+    else if(dir2==0 && animal2==0){
         ctx.drawImage(dog,player2_x, player2_y, 35, 30);
+    }else if(dir2==1 && animal2==0){
+        ctx.drawImage(dogright,player2_x, player2_y, 35, 30);
     }
     check_collision();
 }
@@ -194,7 +226,26 @@ function draw(){
 
 function check_collision(){
     //这个函数的作用是检测两个物体是否碰到，可以检测object和玩家操控的猫猫，也可以是猫猫和猫猫
-
+    if (flag){
+        if (player1_HP <= 0 || player1_FC <= 0){
+            console.log('player2 win');
+            ctx1.clearRect(0, 0, 40, 7);
+            document.getElementById('player1FCValue').innerText = 'Player1_FC:' + player1_FC;
+            document.getElementById('player2FCValue').innerText = 'Player2_FC:' + player2_FC;
+            alert("player2 win");
+            flag = false;
+            reset();
+        }
+        if (player2_HP <= 0 || player2_FC <= 0){
+            console.log('player1 win');
+            ctx2.clearRect(0, 0, 40, 7);
+            document.getElementById('player1FCValue').innerText = 'Player1_FC:' + player1_FC;
+            document.getElementById('player2FCValue').innerText = 'Player2_FC:' + player2_FC;
+            alert("player1 win");
+            flag = false;
+            reset();
+        }
+    }    
     //检测玩家与玩家，撞到了扣血
     console.log("HP1: " + player1_HP);
     console.log("HP2: " + player2_HP);
@@ -235,42 +286,38 @@ function check_collision(){
         }
         
     }
-    if (flag){
-        if (player1_HP <= 0 || player1_FC <= 0){
-            console.log('player2 win');
-            ctx1.clearRect(0, 0, 40, 7);
-            document.getElementById('player1FCValue').innerText = 'Player1_FC:' + player1_FC;
-            document.getElementById('player2FCValue').innerText = 'Player2_FC:' + player2_FC;
-            alert("player2 win");
-            flag = false;
-            reset();
-        }
-        if (player2_HP <= 0 || player2_FC <= 0){
-            console.log('player1 win');
-            ctx2.clearRect(0, 0, 40, 7);
-            document.getElementById('player1FCValue').innerText = 'Player1_FC:' + player1_FC;
-            document.getElementById('player2FCValue').innerText = 'Player2_FC:' + player2_FC;
-            alert("player2 win");
-            alert("player1 win")
-            flag = false;
-            reset();
-        }
-    }    
     
     //检测玩家与物体,需要用循环遍历,撞到好的加攻击，不好的减攻击
     //玩家1
     for (var i = 0; i < 500; i++){
         if (mouth1==1){
             if (player1_x < ob_x[i] + 10 && player1_x + 35 > ob_x[i] && player1_y < ob_y[i] + 10 && player1_y + 30 > ob_y[i]){
-                if (time >= i && time <= i + ob_time[i]){
-                    player1_FC += ob_value[i];
-                    ob_time[i] = 0;
-                    ob_value[i] = 0;
-                    //设置音效
-                    var time1 = time;
-                    if(time>=time1 && time<= time1 + 0.5){
-                    const yummy = new Audio("637072__sergequadrado__dad-says-yummy.wav");
-                    yummy.play();
+                if (animal1==1){
+                    if (time >= i && time <= i + ob_time[i]){
+                        player1_FC += ob_value[i];
+                        //设置音效
+                        if (ob_value[i]==2 || ob_value[i]==5){
+                            const yummy = new Audio("sound/yummy.mp3");
+                            yummy.play();
+                        }
+                        if (ob_value[i]==-3){
+                            const yummy = new Audio("sound/ou.mp3");
+                            yummy.play();
+                        }////////////////////////////////////////////
+                        ob_time[i] = 0;
+                        ob_value[i] = 0;
+                    }
+                }else if(animal1==0){
+                    if (time >= i && time <= i + ob_time[i]){
+                        if (ob_value[i]==-3) {
+                            player1_FC -= ob_value[i];
+                        }else {
+                            player1_FC += ob_value[i];
+                        }
+                        ob_time[i] = 0;
+                        ob_value[i] = 0;
+                        const zaba = new Audio("sound/zaba.mp3");
+                        zaba.play();
                     }
                 }
             }
@@ -281,20 +328,48 @@ function check_collision(){
     for (var i = 0; i < 500; i++){
         if (mouth2==1){
             if (player2_x < ob_x[i] + 10 && player2_x + 35 > ob_x[i] && player2_y < ob_y[i] + 10 && player2_y + 30 > ob_y[i]){
-                if (time >= i && time <= i + ob_time[i]) {
-                    player2_FC += ob_value[i];
-                    ob_time[i] = 0;
-                    ob_value[i] = 0;
-                    //设置音效
-                    var time1 = time;
-                    if(time>=time1 && time<= time1 + 0.5){
-                    const yummy = new Audio("637072__sergequadrado__dad-says-yummy.wav");
-                    yummy.play();
+                if (animal2==1){
+                    if (time >= i && time <= i + ob_time[i]){
+                        player2_FC += ob_value[i];
+                        if (ob_value[i]==2 || ob_value[i]==5){
+                            const yummy = new Audio("sound/yummy(male).mp3");
+                            yummy.play();
+                        }else if (ob_value[i]==-3){
+                            const yummy = new Audio("sound/ou.mp3");
+                            yummy.play();
+                        }////////////////////////////////////////////
+                        ob_time[i] = 0;
+                        ob_value[i] = 0;
+                    }
+                }
+                else if(animal2==0){
+                    if (time >= i && time <= i + ob_time[i]){
+                        if (ob_value[i]==-3) {
+                            player2_FC -= ob_value[i];
+                        }
+                        else {
+                            player2_FC += ob_value[i];
+                        }
+                        ob_time[i] = 0;
+                        ob_value[i] = 0;
+                        //设置音效
+                        const zaba = new Audio("sound/zaba.mp3");
+                        zaba.play();
                     }
                 }
             }
         }
         document.getElementById('player2FCValue').innerText = 'Player2_FC:' + player2_FC;
+    }
+    if (flag){
+        if (player1_HP <= 0 || player1_FC <= 0){
+            const win = new Audio('sound/win.mp3');
+            win.play();
+        }
+        if (player2_HP <= 0 || player2_FC <= 0){
+            const win = new Audio('sound/win.mp3');
+            win.play();
+        }
     }
 }
 
@@ -313,6 +388,7 @@ function reset(){
         ob_y = [];
         ob_time = [];
         ob_value = [];
+        moment = 10000000000;
 
         player2_x = 0;
         player2_y = 0;
@@ -382,8 +458,12 @@ function initialize(){
             }
         }
         if(pressButton.code == 'Space'){
-            if (mouth1==0) mouth1=1;
-            else mouth1=0;
+            if (animal1==1)
+            {
+                if (mouth1==0) mouth1=1;//
+                else mouth1=0;
+            }
+            else {mouth1==1;}
         }
     });
     //玩家2通过WASD移动
@@ -421,8 +501,12 @@ function initialize(){
             }
         }
         if(pressButton.key == 'q'){
-            if (mouth2==0) mouth2=1;
-            else mouth2=0;
+            if (animal2==1)
+            {
+                if (mouth2==0) mouth2=1;//
+                else mouth2=0;
+            }
+            else {mouth2==1;}
         }
     });
 
