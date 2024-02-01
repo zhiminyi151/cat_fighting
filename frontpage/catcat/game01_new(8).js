@@ -89,13 +89,13 @@ function generate_object(){
             ob_value.push(2);
             ob_x.push(tmp_posX * 270);
             ob_y.push(tmp_posY * 120);
-            ob_time.push(Math.floor(Math.random() * 2) + 3);//the duration is 4-6s(include 4 and 6)
+            ob_time.push(Math.floor(Math.random() * 2) + 10);//the duration is 4-6s(include 4 and 6)
         } 
         else if(tmp_type >= 0.6){
             ob_value.push(5);
             ob_x.push(tmp_posX * 270);
             ob_y.push(tmp_posY * 120);
-            ob_time.push(Math.floor(Math.random() * 2) + 2);//1-3 seconds
+            ob_time.push(Math.floor(Math.random() * 2) + 8);//1-3 seconds
         }
         else{
             ob_value.push(-3);
@@ -110,7 +110,7 @@ function generate_object(){
             // ob_y.push((tmp_posY - 0.5) * 120 + player_pos_y[chos]);
             ob_x.push(tmp_posX * 270);
             ob_y.push(tmp_posY * 120);
-            ob_time.push(Math.floor(Math.random() * 2) + 1);//4-10 seconds
+            ob_time.push(Math.floor(Math.random() * 2) + 10);//4-10 seconds
         }
     }
 }
@@ -119,7 +119,7 @@ function draw(){
     ctx.clearRect(0, 0, 300, 150);
     //drawHPandFC();
     for (var i = 0; i < 500; i++){
-        if (time >= i && time <= 3 * i + ob_time[i]){
+        if (time >= i && time <= i + ob_time[i]){
             if (ob_value[i] == 2){
                 ctx.drawImage(object1, ob_x[i], ob_y[i], 10, 10);
             }
