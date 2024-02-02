@@ -26,3 +26,4 @@ Name: Zhu Minyi, Shi Weiyi, Zhuo Yuwei, Xu Rong
 - run `npm install three` on the terminal
 - then `code .` `npm run dev`
 - open the .html file
+- 
